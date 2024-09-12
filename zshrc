@@ -1,3 +1,37 @@
+source /apollo/env/envImprovement/var/zshrc
+export JAVA_HOME=$(dirname $(dirname $(realpath /usr/bin/java)))
+export PATH=$JAVA_HOME/bin:$PATH
+export BRAZIL_WORKSPACE_DEFAULT_LAYOUT=short
+SAVEHIST=100000
+HISTFILE=~/.zsh_history
+
+fpath=(~/.zsh/completion $fpath)
+autoload -Uz compinit && compinit -i
+
+for f in SDETools envImprovement AmazonAwsCli OdinTools; do
+    if [[ -d /apollo/env/$f ]]; then
+        export PATH=$PATH:/apollo/env/$f/bin
+    fi
+done
+
+export AUTO_TITLE_SCREENS="NO"
+
+export PROMPT="
+%{$fg[white]%}(%D %*) <%?> [%~] $program %{$fg[default]%}
+%{$fg[cyan]%}%m %#%{$fg[default]%} "
+
+export RPROMPT=
+
+set-title() {
+    echo -e "\e]0;$*\007"
+}
+
+ssh() {
+    set-title $*;
+    /usr/bin/ssh -2 $*;
+    set-title $HOST;
+}
+
 bba='brazil-build apollo-pkg'
 alias bre='brazil-runtime-exec'
 alias brc='brazil-recursive-cmd'
